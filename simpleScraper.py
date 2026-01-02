@@ -31,6 +31,9 @@ retries = Retry(
 session.mount("https://", HTTPAdapter(max_retries=retries))
 
 def get_soup_books_on_page(response):
+    if response.status_code != 200:
+        logging.error(f"Failed to retrieve page: {response.url} with status code {response.status_code}")
+        return []
     soup = BeautifulSoup(response.text, "html.parser")
     return soup.select("article.product_pod")
 
